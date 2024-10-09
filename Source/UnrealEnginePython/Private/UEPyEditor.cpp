@@ -5,7 +5,7 @@
 
 #include "Developer/AssetTools/Public/AssetToolsModule.h"
 #include "Editor/UnrealEd/Classes/Factories/Factory.h"
-#include "Runtime/AssetRegistry/Public/AssetRegistryModule.h"
+#include "AssetRegistry/AssetRegistryModule.h"
 #include "Kismet2/KismetEditorUtilities.h"
 #include "Editor/ContentBrowser/Public/ContentBrowserModule.h"
 #include "Editor/UnrealEd/Public/PackageTools.h"
@@ -1143,7 +1143,7 @@ PyObject *py_unreal_engine_get_assets_by_class(PyObject * self, PyObject * args)
 	TArray<FAssetData> assets;
 
 	FAssetRegistryModule& AssetRegistryModule = FModuleManager::GetModuleChecked<FAssetRegistryModule>("AssetRegistry");
-	AssetRegistryModule.Get().GetAssetsByClass(UTF8_TO_TCHAR(path), assets, recursive);
+	AssetRegistryModule.Get().GetAssetsByClass(FTopLevelAssetPath(UTF8_TO_TCHAR(path)), assets, recursive);
 
 	PyObject *assets_list = PyList_New(0);
 
