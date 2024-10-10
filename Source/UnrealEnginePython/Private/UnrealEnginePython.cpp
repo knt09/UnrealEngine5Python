@@ -9,6 +9,8 @@
 #include "ClassIconFinder.h"
 #endif
 
+#include <clocale>
+
 #include "Styling/SlateStyleRegistry.h"
 #if WITH_EDITOR
 #include "IPythonScriptPlugin.h"

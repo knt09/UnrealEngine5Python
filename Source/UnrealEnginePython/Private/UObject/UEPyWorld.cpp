@@ -348,10 +348,7 @@ PyObject *py_ue_world_create_folder(ue_PyUObject *self, PyObject * args)
 	char *path;
 	if (!PyArg_ParseTuple(args, "s:world_create_folder", &path))
 		return nullptr;
-
-	if (!FActorFolders::IsAvailable())
-		return PyErr_Format(PyExc_Exception, "FActorFolders is not available");
-
+	
 	UWorld *world = ue_get_uworld(self);
 	if (!world)
 		return PyErr_Format(PyExc_Exception, "unable to retrieve UWorld from uobject");
@@ -371,10 +368,7 @@ PyObject *py_ue_world_delete_folder(ue_PyUObject *self, PyObject * args)
 	char *path;
 	if (!PyArg_ParseTuple(args, "s:world_delete_folder", &path))
 		return nullptr;
-
-	if (!FActorFolders::IsAvailable())
-		return PyErr_Format(PyExc_Exception, "FActorFolders is not available");
-
+	
 	UWorld *world = ue_get_uworld(self);
 	if (!world)
 		return PyErr_Format(PyExc_Exception, "unable to retrieve UWorld from uobject");
@@ -396,9 +390,6 @@ PyObject *py_ue_world_rename_folder(ue_PyUObject *self, PyObject * args)
 	if (!PyArg_ParseTuple(args, "ss:world_rename_folder", &path, &new_path))
 		return nullptr;
 
-	if (!FActorFolders::IsAvailable())
-		return PyErr_Format(PyExc_Exception, "FActorFolders is not available");
-
 	UWorld *world = ue_get_uworld(self);
 	if (!world)
 		return PyErr_Format(PyExc_Exception, "unable to retrieve UWorld from uobject");
@@ -416,9 +407,6 @@ PyObject *py_ue_world_folders(ue_PyUObject *self, PyObject * args)
 {
 
 	ue_py_check(self);
-
-	if (!FActorFolders::IsAvailable())
-		return PyErr_Format(PyExc_Exception, "FActorFolders is not available");
 
 	UWorld *world = ue_get_uworld(self);
 	if (!world)

@@ -38,7 +38,6 @@
 #else
 #include "Editor/UnrealEd/Public/FbxImporter.h"
 #endif
-#include "Editor/MovieSceneTools/Public/MatineeImportTools.h"
 #endif
 
 #include "GameFramework/Actor.h"
@@ -824,7 +823,7 @@ PyObject *py_ue_sequencer_create_folder(ue_PyUObject *self, PyObject * args)
 	else
 	{
 		scene->Modify();
-		scene->GetRootFolders().Add(new_folder);
+		scene->AddRootFolder(new_folder);
 	}
 
 	Py_RETURN_UOBJECT(new_folder);
@@ -1196,6 +1195,7 @@ PyObject *py_ue_sequencer_section_add_key(ue_PyUObject *self, PyObject * args)
 			Py_DECREF(f_value);
 #if !(ENGINE_MAJOR_VERSION == 5 || (ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION >= 20))
 			section_float->AddKey(time, value, (EMovieSceneKeyInterpolation)interpolation);
+			Py_RETURN_NONE;
 #else
 			FMovieSceneFloatChannel& Channel = (FMovieSceneFloatChannel&)section_float->GetChannel();
 			int32 RetValue = -1;
@@ -1220,7 +1220,7 @@ PyObject *py_ue_sequencer_section_add_key(ue_PyUObject *self, PyObject * args)
 			}
 			return PyLong_FromLong(RetValue);
 #endif
-			Py_RETURN_NONE;
+			
 		}
 	}
 
@@ -1233,12 +1233,13 @@ PyObject *py_ue_sequencer_section_add_key(ue_PyUObject *self, PyObject * args)
 				value = true;
 #if !(ENGINE_MAJOR_VERSION == 5 || (ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION >= 20))
 			section_bool->AddKey(time, value, (EMovieSceneKeyInterpolation)interpolation);
+			Py_RETURN_NONE;
 #else
 			FMovieSceneBoolChannel& Channel = section_bool->GetChannel();
 			int32 RetValue = Channel.GetData().AddKey(FrameNumber, value);
 			return PyLong_FromLong(RetValue);
 #endif
-			Py_RETURN_NONE;
+			
 		}
 	}
 
@@ -1368,6 +1369,7 @@ PyObject *py_ue_sequencer_section_add_key(ue_PyUObject *self, PyObject * args)
 			section_vector->AddKey(time, vx, (EMovieSceneKeyInterpolation)interpolation);
 			section_vector->AddKey(time, vy, (EMovieSceneKeyInterpolation)interpolation);
 			section_vector->AddKey(time, vz, (EMovieSceneKeyInterpolation)interpolation);
+			Py_RETURN_NONE;
 #else
 			int RetValueVX, RetValueVY, RetValueVZ = -1;
 
@@ -1406,8 +1408,6 @@ PyObject *py_ue_sequencer_section_add_key(ue_PyUObject *self, PyObject * args)
 			}
 			return Py_BuildValue("(iii)", RetValueVX, RetValueVY, RetValueVZ);
 #endif
-
-			Py_RETURN_NONE;
 }
 	}
 
