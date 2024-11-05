@@ -9,7 +9,7 @@
 #include "Engine/UserDefinedEnum.h"
 
 #if WITH_EDITOR
-#include "Runtime/AssetRegistry/Public/AssetRegistryModule.h"
+#include "AssetRegistry/AssetRegistryModule.h"
 #include "ObjectTools.h"
 #include "UnrealEd.h"
 #include "Runtime/Core/Public/HAL/FeedbackContextAnsi.h"
@@ -129,7 +129,7 @@ FProperty* FProperty_New(FFieldVariant* scope, FFieldClass* f_class, FName name,
 		return f_prop;
 	}
 
-	UE_LOG(LogPython, Error, TEXT("new property unimplemented property class %s for %s"), TCHAR_TO_UTF8(*f_class->GetName()), *name.ToString());
+	UE_LOG(LogPython, Error, TEXT("new property unimplemented property class %s for %s"), *f_class->GetName(), *name.ToString());
 
 	return nullptr;
 }

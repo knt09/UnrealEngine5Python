@@ -14,6 +14,7 @@
 #endif
 
 #include "Animation/AnimInstance.h"
+#include "Engine/SkinnedAssetCommon.h"
 
 
 PyObject *py_ue_get_anim_instance(ue_PyUObject *self, PyObject * args)
