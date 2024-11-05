@@ -76,15 +76,21 @@ PyObject *py_ue_sound_get_data(ue_PyUObject *self, PyObject * args)
 
 	USoundWave *sound = ue_py_check_type<USoundWave>(self);
 	if (!sound)
+	{
 		return PyErr_Format(PyExc_Exception, "UObject is not a USoundWave.");
+	}
+	FByteBulkData* raw_data = sound->GetCompressedData("OGG");
 
-	FByteBulkData raw_data = sound->RawData;
-
-	char *data = (char *)raw_data.Lock(LOCK_READ_ONLY);
-	int32 data_size = raw_data.GetBulkDataSize();
-	PyObject *py_data = PyBytes_FromStringAndSize(data, data_size);
-	raw_data.Unlock();
-	return py_data;
+	if (raw_data)
+	{
+		char *data = (char *)raw_data->Lock(LOCK_READ_ONLY);
+		int32 data_size = raw_data->GetBulkDataSize();
+		PyObject *py_data = PyBytes_FromStringAndSize(data, data_size);
+		raw_data->Unlock();
+		return py_data;	
+	}
+	
+	return nullptr;
 }
 
 PyObject *py_ue_sound_set_data(ue_PyUObject *self, PyObject * args)
@@ -104,12 +110,15 @@ PyObject *py_ue_sound_set_data(ue_PyUObject *self, PyObject * args)
 
 	sound->FreeResources();
 	sound->InvalidateCompressedData();
-
-	sound->RawData.Lock(LOCK_READ_WRITE);
-	void *data = sound->RawData.Realloc(sound_buffer.len);
-	FMemory::Memcpy(data, sound_buffer.buf, sound_buffer.len);
-	sound->RawData.Unlock();
-
+	FByteBulkData* raw_data = sound->GetCompressedData("OGG");
+	if (raw_data)
+	{
+		raw_data->Lock(LOCK_READ_WRITE);
+		void *data = raw_data->Realloc(sound_buffer.len);
+		FMemory::Memcpy(data, sound_buffer.buf, sound_buffer.len);
+		raw_data->Unlock();	
+	}
+	
 	Py_RETURN_NONE;
 }
 
